@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 // Middleware
 app.use(express.json());  // Parse incoming JSON requests
 const corsOptions = {
-  origin: 'https://final-f-kohl.vercel.app/', // Specify the frontend URL here
+  origin: 'https://final-f-kohl.vercel.app', // Specify the frontend URL here
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods (optional)
   allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers (optional)
 };
