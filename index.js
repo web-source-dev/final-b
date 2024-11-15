@@ -19,6 +19,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions)); // Apply CORS with options
+app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
+
 
 // MongoDB Connection using Mongoose
 const connectDB = async () => {
