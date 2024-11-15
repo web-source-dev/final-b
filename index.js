@@ -12,12 +12,13 @@ const app = express();
 app.use(bodyParser.json())
 // Middleware
 app.use(express.json());  // Parse incoming JSON requests
-app.use(cors());
+const corsOptions = {
+  origin: 'https://final-f-kohl.vercel.app/', // Specify the frontend URL here
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods (optional)
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers (optional)
+};
 
-
-console.log(path.join(__dirname, 'uploads'));  // Log the full path to the uploads directory
-
-
+app.use(cors(corsOptions)); // Apply CORS with options
 
 // MongoDB Connection using Mongoose
 const connectDB = async () => {
