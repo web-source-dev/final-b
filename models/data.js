@@ -2,12 +2,9 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  first_name: {
+  name: {
     type: String,
     required: true,
-  },
-  last_name: {
-    type: String,
   },
   email: {
     type: String,
@@ -22,17 +19,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  street: {
-    type: String,
-  },
-  city: {
-    type: String,
-  },
-  state: {
-    type: String,
-    required:true
-  },
-  zipcode: {
+  address: {
     type: String,
     required:true
   },
@@ -54,7 +41,9 @@ const userSchema = new mongoose.Schema({
   },
   user_image :{
     type: String,
+    required: true
   }
 });
 
 module.exports = mongoose.model('User', userSchema);
+
