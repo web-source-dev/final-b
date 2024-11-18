@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   },
   last_name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -23,7 +22,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
+  street: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  state: {
+    type: String,
+    required:true
+  },
+  zipcode: {
     type: String,
     required:true
   },
