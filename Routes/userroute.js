@@ -5,34 +5,59 @@ const Data = require('../models/data'); // Assuming you have a Mongoose model
 
 // POST route for storing QR data and creating QR code
 router.post('/qrdata', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+  const {
+    email,
+    work_email,
+    organization,
+    phone,
+    first_name,
+    last_name,
+    street,
+    city,
+    state,
+    zip_code,
+    youtube_url,
+    facebook_url,
+    linkden_url,
+    twitter_url,
+    user_image,
+  } = req.body;
 
   try {
-      // Save the data to MongoDB (Mongoose model)
-      const qrdata = new Data({
-          name,
-          email,
-          work_email,
-          organization,
-          phone,
-          address,
-          youtube_url,
-          facebook_url,
-          linkden_url,
-          twitter_url,
-          user_image, // Cloudinary URL
-      });
+    // Combine address fields into a single object or store them as separate fields in MongoDB
+    const address = {
+      street,
+      city,
+      state,
+      zip_code,
+    };
 
-      await qrdata.save(); // Save the data to MongoDB
+    // Save the data to MongoDB (Mongoose model)
+    const qrdata = new Data({
+      first_name,
+      last_name,
+      email,
+      work_email,
+      organization,
+      phone,
+      address, // Storing address as an object
+      youtube_url,
+      facebook_url,
+      linkden_url,
+      twitter_url,
+      user_image, // Cloudinary URL
+    });
 
-      res.status(201).json({
-          message: 'Submitted successfully',
-          qrdata,
-          userId: qrdata._id,
-      });
+    await qrdata.save(); // Save the data to MongoDB
+
+    res.status(201).json({
+      message: 'Submitted successfully',
+      qrdata,
+      userId: qrdata._id,
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error while submitting', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error while submitting', error: error.message });
   }
 });
 
@@ -56,9 +81,42 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 router.put('/qrdata/:id', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+  const {
+    email,
+    work_email,
+    organization,
+    phone,
+     first_name,
+    last_name,
+    street,
+    city,
+    state,
+    zip_code,
+    youtube_url,
+    facebook_url,
+    linkden_url,
+    twitter_url,
+    user_image
+  } = req.body;
 
-  console.log(user_image, name, email, work_email);
+  console.log('Incoming data:', {
+    email,
+    work_email,
+    organization,
+    phone,
+    first_name,
+    last_name,
+    street,
+    city,
+    state,
+    zip_code,
+    youtube_url,
+    facebook_url,
+    linkden_url,
+    twitter_url,
+    user_image,
+  });
+
   try {
     // Find the existing QR data by ID
     const qrdata = await Data.findById(req.params.id);
@@ -67,38 +125,44 @@ router.put('/qrdata/:id', async (req, res) => {
       return res.status(404).json({ message: 'QR Data not found' });
     }
 
-    // Update the user data
-    qrdata.name = name || qrdata.name;
-    qrdata.email = email || qrdata.email;
-    qrdata.work_email = work_email || qrdata.work_email;
-    qrdata.organization = organization || qrdata.organization;
-    qrdata.phone = phone || qrdata.phone;
-    qrdata.address = address || qrdata.address;
-    qrdata.youtube_url = youtube_url || qrdata.youtube_url;
-    qrdata.facebook_url = facebook_url || qrdata.facebook_url;
-    qrdata.linkden_url = linkden_url || qrdata.linkden_url;
-    qrdata.twitter_url = twitter_url || qrdata.twitter_url;
-    
-    // If a new image URL is provided (from Cloudinary), update the image URL
-    if (user_image) {
-      qrdata.user_image = user_image;
+    // Update fields only if new values are provided
+    if (first_name) qrdata.first_name = first_name;
+    if (last_name) qrdata.last_name = last_name;
+    if (email) qrdata.email = email;
+    if (work_email) qrdata.work_email = work_email;
+    if (organization) qrdata.organization = organization;
+    if (phone) qrdata.phone = phone;
+
+    // Address fields
+    if (street || city || state || zipCode) {
+      qrdata.address = qrdata.address || {};
+      if (street) qrdata.address.street = street;
+      if (city) qrdata.address.city = city;
+      if (state) qrdata.address.state = state;
+      if (zipCode) qrdata.address.zipCode = zipCode;
     }
+
+    // Social Media URLs
+    if (youtube_url) qrdata.youtube_url = youtube_url;
+    if (facebook_url) qrdata.facebook_url = facebook_url;
+    if (linkden_url) qrdata.linkden_url = linkden_url;
+    if (twitter_url) qrdata.twitter_url = twitter_url;
+
+    // User image
+    if (user_image) qrdata.user_image = user_image;
 
     // Save the updated data
     await qrdata.save();
 
     res.status(200).json({
       message: 'QR Data updated successfully',
-      qrdata,
-      userId: qrdata._id,
-      user_image: qrdata.user_image // Return the updated image URL from Cloudinary
+      updatedData: qrdata,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error while updating', error: error.message });
+    console.error('Error updating QR data:', error);
+    res.status(500).json({ message: 'An error occurred while updating QR data.', error: error.message });
   }
 });
-
 
 router.get('/users', async (req, res) => {
   try {
