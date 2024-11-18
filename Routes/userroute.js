@@ -5,17 +5,21 @@ const Data = require('../models/data'); // Assuming you have a Mongoose model
 
 // POST route for storing QR data and creating QR code
 router.post('/qrdata', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+  const { first_name,last_name, email, work_email, organization, phone, street,city,state,zipcode, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
 
   try {
       // Save the data to MongoDB (Mongoose model)
       const qrdata = new Data({
-          name,
+          first_name,
+          last_name,
           email,
           work_email,
           organization,
           phone,
-          address,
+          steet,
+          city,
+          state,
+          zipcode,
           youtube_url,
           facebook_url,
           linkden_url,
@@ -56,7 +60,7 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 router.put('/qrdata/:id', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+   const { first_name,last_name, email, work_email, organization, phone, street,city,state,zipcode, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
 
   console.log(user_image, name, email, work_email);
   try {
@@ -68,21 +72,22 @@ router.put('/qrdata/:id', async (req, res) => {
     }
 
     // Update the user data
-    qrdata.name = name || qrdata.name;
+    qrdata.first_name = first_name || qrdata.first_name;
+    qrdata.last_name = last_name || qrdata.last_name;
     qrdata.email = email || qrdata.email;
     qrdata.work_email = work_email || qrdata.work_email;
     qrdata.organization = organization || qrdata.organization;
     qrdata.phone = phone || qrdata.phone;
-    qrdata.address = address || qrdata.address;
+    qrdata.street = street || qrdata.street;
+    qrdata.city = city || qrdata.city;
+    qrdata.state = state || qrdata.state;
+    qrdata.zipcode = zipcode || qrdata.zipcode;
     qrdata.youtube_url = youtube_url || qrdata.youtube_url;
     qrdata.facebook_url = facebook_url || qrdata.facebook_url;
     qrdata.linkden_url = linkden_url || qrdata.linkden_url;
     qrdata.twitter_url = twitter_url || qrdata.twitter_url;
+    qrdata.user_image = user_image || qrdata.user_image;
     
-    // If a new image URL is provided (from Cloudinary), update the image URL
-    if (user_image) {
-      qrdata.user_image = user_image;
-    }
 
     // Save the updated data
     await qrdata.save();
