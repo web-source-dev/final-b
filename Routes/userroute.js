@@ -12,7 +12,10 @@ router.post('/qrdata', async (req, res) => {
     work_email,
     organization,
     phone,
-    address,
+    street,
+    city,
+    state,
+    zip,
     youtube_url,
     facebook_url,
     linkden_url,
@@ -28,7 +31,10 @@ router.post('/qrdata', async (req, res) => {
       work_email,
       organization,
       phone,
-      address,
+      street,
+      city,
+      state,
+      zip,
       youtube_url,
       facebook_url,
       linkden_url,
@@ -76,7 +82,10 @@ router.put('/qrdata/:id', async (req, res) => {
     work_email,
     organization,
     phone,
-    address,
+    street,
+    city,
+    state,
+    zip,
     youtube_url,
     facebook_url,
     linkden_url,
@@ -100,16 +109,10 @@ router.put('/qrdata/:id', async (req, res) => {
     qrdata.work_email = work_email || qrdata.work_email;
     qrdata.organization = organization || qrdata.organization;
     qrdata.phone = phone || qrdata.phone;
-    
-    if (address && Array.isArray(address)) {
-      qrdata.address = address.map((newAddr, index) => ({
-        ...qrdata.address?.[index], // Preserve existing
-        ...newAddr, // Overwrite
-      }));
-    } else {
-      qrdata.address = address || qrdata.address;
-    }
-    
+    qrdata.street = street || qrdata.street;
+    qrdata.city = city || qrdata.city;
+    qrdata.state = state || qrdata.state;
+    qrdata.zip = zip || qrdata.zip;
     qrdata.youtube_url = youtube_url || qrdata.youtube_url;
     qrdata.facebook_url = facebook_url || qrdata.facebook_url;
     qrdata.linkden_url = linkden_url || qrdata.linkden_url;
