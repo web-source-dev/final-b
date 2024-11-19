@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 // Middleware
 app.use(express.json());  // Parse incoming JSON requests
 app.use(cors({
-  origin: '*',  // Allow all origins (or specify a specific domain here)
+  origin: 'https://harmony-4all.vercel.app/',  // Allow all origins (or specify a specific domain here)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,  // Allow credentials if necessary (e.g., cookies, auth headers)
