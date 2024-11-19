@@ -22,22 +22,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: [
-    {
-      street: {
-        type: String,
-      },
-      city: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      zip: {
-        type: String,
-      },
-    },
-  ],
+  street: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  zip: {
+    type: String,
+  },
   youtube_url: {
     type: String,
   },
