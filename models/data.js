@@ -2,9 +2,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  name: {
+  first_name: {
     type: String,
     required: true,
+  },
+  last_name: {
+    type: String,
   },
   email: {
     type: String,
@@ -19,10 +22,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required:true
-  },
+  address: [
+    {
+      street: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      state: {
+        type: String,
+      },
+      zip: {
+        type: String,
+      },
+    },
+  ],
   youtube_url: {
     type: String,
   },
@@ -46,4 +61,5 @@ const userSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('User', userSchema);
+
 
