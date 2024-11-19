@@ -18,12 +18,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Required if you use cookies or auth tokens
 }));
-app.use(cors({
-  origin: 'https://harmony-4all.vercel.app', // Exact origin without a trailing slash
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Required if you use cookies or auth tokens
-}));
 
 app.options('*', cors()); // Handle preflight requests globally
 
