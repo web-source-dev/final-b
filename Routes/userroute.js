@@ -5,38 +5,49 @@ const Data = require('../models/data'); // Assuming you have a Mongoose model
 
 // POST route for storing QR data and creating QR code
 router.post('/qrdata', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    work_email,
+    organization,
+    phone,
+    address,
+    youtube_url,
+    facebook_url,
+    linkden_url,
+    twitter_url,
+    user_image,
+  } = req.body;
 
   try {
-      // Save the data to MongoDB (Mongoose model)
-      const qrdata = new Data({
-          name,
-          email,
-          work_email,
-          organization,
-          phone,
-          address,
-          youtube_url,
-          facebook_url,
-          linkden_url,
-          twitter_url,
-          user_image, // Cloudinary URL
-      });
+    const newUser = new Data({
+      first_name,
+      last_name,
+      email,
+      work_email,
+      organization,
+      phone,
+      address,
+      youtube_url,
+      facebook_url,
+      linkden_url,
+      twitter_url,
+      user_image,
+    });
 
-      await qrdata.save(); // Save the data to MongoDB
+    await newUser.save();
 
-      res.status(201).json({
-          message: 'Submitted successfully',
-          qrdata,
-          userId: qrdata._id,
-      });
+    res.status(201).json({
+      message: 'Submitted successfully',
+      userId: newUser._id,
+      qrdata: newUser,
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error while submitting', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error while submitting', error: error.message });
   }
 });
-
-
 
 router.delete('/users/:userId', async (req, res) => {
   const { userId } = req.params;
@@ -58,9 +69,22 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 router.put('/qrdata/:id', async (req, res) => {
-  const { name, email, work_email, organization, phone, address, youtube_url, facebook_url, linkden_url, twitter_url, user_image } = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    work_email,
+    organization,
+    phone,
+    address,
+    youtube_url,
+    facebook_url,
+    linkden_url,
+    twitter_url,
+    user_image,
+  } = req.body;
 
-  console.log(user_image, name, email, work_email);
+  console.log(user_image, first_name, email, work_email);
   try {
     // Find the existing QR data by ID
     const qrdata = await Data.findById(req.params.id);
@@ -70,20 +94,29 @@ router.put('/qrdata/:id', async (req, res) => {
     }
 
     // Update the user data
-    qrdata.name = name || qrdata.name;
+    qrdata.first_name = first_name || qrdata.first_name;
+    qrdata.last_name = last_name || qrdata.last_name;
     qrdata.email = email || qrdata.email;
     qrdata.work_email = work_email || qrdata.work_email;
     qrdata.organization = organization || qrdata.organization;
     qrdata.phone = phone || qrdata.phone;
-    qrdata.address = address || qrdata.address;
+    
+    if (address && Array.isArray(address)) {
+      qrdata.address = address.map((newAddr, index) => ({
+        ...qrdata.address?.[index], // Preserve existing
+        ...newAddr, // Overwrite
+      }));
+    } else {
+      qrdata.address = address || qrdata.address;
+    }
+    
     qrdata.youtube_url = youtube_url || qrdata.youtube_url;
     qrdata.facebook_url = facebook_url || qrdata.facebook_url;
     qrdata.linkden_url = linkden_url || qrdata.linkden_url;
     qrdata.twitter_url = twitter_url || qrdata.twitter_url;
     
-    // If a new image URL is provided (from Cloudinary), update the image URL
     if (user_image) {
-      qrdata.user_image = user_image;
+      qrdata.user_image = user_image; // Update if new image is provided
     }
 
     // Save the updated data
@@ -100,6 +133,7 @@ router.put('/qrdata/:id', async (req, res) => {
     res.status(500).json({ message: 'Error while updating', error: error.message });
   }
 });
+
 
 router.get('/users', async (req, res) => {
   try {
