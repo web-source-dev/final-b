@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const questionSchema = new mongoose.Schema({
     question: {
         type: String,
-        default: 'What is the name of your childhood friend'
+        default: 'Which city is known as the "Big Apple"?'
     },
     correct_answer: {
         type: String,
