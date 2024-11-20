@@ -76,6 +76,7 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 router.put('/qrdata/:id', async (req, res) => {
+  console.log('Request Body:', req.body);  // Add this line to inspect the incoming data
   const {
     first_name,
     last_name,
@@ -94,16 +95,14 @@ router.put('/qrdata/:id', async (req, res) => {
     user_image,
   } = req.body;
 
-  console.log(user_image, first_name, email, work_email);
   try {
-    // Find the existing QR data by ID
     const qrdata = await Data.findById(req.params.id);
 
     if (!qrdata) {
       return res.status(404).json({ message: 'QR Data not found' });
     }
 
-    // Update the user data
+    // Update logic
     qrdata.first_name = first_name || qrdata.first_name;
     qrdata.last_name = last_name || qrdata.last_name;
     qrdata.email = email || qrdata.email;
@@ -120,17 +119,16 @@ router.put('/qrdata/:id', async (req, res) => {
     qrdata.twitter_url = twitter_url || qrdata.twitter_url;
     
     if (user_image) {
-      qrdata.user_image = user_image; // Update if new image is provided
+      qrdata.user_image = user_image;
     }
 
-    // Save the updated data
     await qrdata.save();
 
     res.status(200).json({
       message: 'QR Data updated successfully',
       qrdata,
       userId: qrdata._id,
-      user_image: qrdata.user_image // Return the updated image URL from Cloudinary
+      user_image: qrdata.user_image,
     });
   } catch (error) {
     console.error(error);
