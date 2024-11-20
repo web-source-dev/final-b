@@ -19,9 +19,9 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   phone: {
-    type: String,
-    required: true,
-  },
+  type: Number,
+  required: true,
+},
   street: {
     type: String,
   },
