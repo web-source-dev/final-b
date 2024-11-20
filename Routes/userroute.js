@@ -5,26 +5,25 @@ const Question = require('../models/question');
 
 
 
-router.post('/check2fa',async (req,res) => {
-  const question = req.body.question;
-  const correct_answer = req.body.correct_answer;
+
+router.post('/checkfa', async (req, res) => {
+  const { question, correct_answer } = req.body;
 
   try {
     const questionData = await Question.findOne({ question });
     if (!questionData) {
-      return res.status(404).json({ message: 'Question not found' });
-    };
+      return res.status(404).json({ fasts: 1, msg: 'Question not found' });
+    }
     if (questionData.correct_answer === correct_answer) {
-      res.json({ fasts:0, msg: 'Correct answer' });
+      return res.json({ fasts: 0, msg: 'Correct answer' });
     } else {
-      res.status(400).json({fasts:1, msg: 'Incorrect answer' });
+      return res.status(400).json({ fasts: 1, msg: 'Incorrect answer' });
     }
+  } catch (err) {
+    console.error('Error fetching question:', err);
+    return res.status(500).json({ msg: 'Server error while fetching question' });
   }
-    catch (err) {
-      console.error('Error fetching question:', err);
-      res.status(500).json({ message: 'Server error while fetching question' });
-    }
-})
+});
 
 
 // POST route for storing QR data and creating QR code
