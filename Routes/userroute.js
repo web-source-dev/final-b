@@ -5,7 +5,6 @@ const Question = require('../models/question');
 
 
 
-
 router.post('/checkfa', async (req, res) => {
   const { question, correct_answer } = req.body;
 
@@ -24,7 +23,6 @@ router.post('/checkfa', async (req, res) => {
     return res.status(500).json({ msg: 'Server error while fetching question' });
   }
 });
-
 
 // POST route for storing QR data and creating QR code
 router.post('/qrdata', async (req, res) => {
