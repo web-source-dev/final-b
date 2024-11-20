@@ -1,28 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Data = require('../models/data'); // Assuming you have a Mongoose model
-const Question = require('../models/question');
 
 
-
-router.post('/checkfa', async (req, res) => {
-  const { question, correct_answer } = req.body;
-
-  try {
-    const questionData = await Question.findOne({ question });
-    if (!questionData) {
-      return res.status(404).json({ fasts: 1, msg: 'Question not found' });
-    }
-    if (questionData.correct_answer === correct_answer) {
-      return res.json({ fasts: 0, msg: 'Correct answer' });
-    } else {
-      return res.status(400).json({ fasts: 1, msg: 'Incorrect answer' });
-    }
-  } catch (err) {
-    console.error('Error fetching question:', err);
-    return res.status(500).json({ msg: 'Server error while fetching question' });
-  }
-});
 
 // POST route for storing QR data and creating QR code
 router.post('/qrdata', async (req, res) => {
