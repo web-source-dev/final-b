@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
   type: Number,
-  required: true,
 },
   street: {
     type: String,
@@ -46,13 +45,15 @@ const userSchema = new mongoose.Schema({
   twitter_url: {
     type: String,
   },
+   instagram_url: {
+    type: String,
+  },
   isAllowed :{
     type: Boolean,
     default : true
   },
   user_image :{
     type: String,
-    required: true
   }
 });
 
