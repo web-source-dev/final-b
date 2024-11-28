@@ -21,6 +21,7 @@ router.post('/qrdata', async (req, res) => {
     facebook_url,
     linkden_url,
     twitter_url,
+    instagram_url,
     user_image,
   } = req.body;
 
@@ -40,6 +41,7 @@ router.post('/qrdata', async (req, res) => {
       facebook_url,
       linkden_url,
       twitter_url,
+      instagram_url,
       user_image,
     });
 
@@ -92,6 +94,7 @@ router.put('/qrdata/:id', async (req, res) => {
     facebook_url,
     linkden_url,
     twitter_url,
+    instagram_url,
     user_image,
   } = req.body;
 
@@ -117,6 +120,7 @@ router.put('/qrdata/:id', async (req, res) => {
     qrdata.facebook_url = facebook_url || qrdata.facebook_url;
     qrdata.linkden_url = linkden_url || qrdata.linkden_url;
     qrdata.twitter_url = twitter_url || qrdata.twitter_url;
+    qrdata.instagram_url = instagram_url || qrdata.instagram_url;
     
     if (user_image) {
       qrdata.user_image = user_image;
