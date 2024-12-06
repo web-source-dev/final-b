@@ -13,6 +13,9 @@ router.post('/qrdata', async (req, res) => {
     work_email,
     organization,
     phone,
+    cell_phone: '',
+    website_name: '',
+    website_url: '',
     street,
     city,
     state,
@@ -33,6 +36,9 @@ router.post('/qrdata', async (req, res) => {
       work_email,
       organization,
       phone,
+      cell_phone: '',
+      website_name: '',
+      website_url: '',
       street,
       city,
       state,
@@ -86,6 +92,9 @@ router.put('/qrdata/:id', async (req, res) => {
     work_email,
     organization,
     phone,
+    cell_phone: '',
+    website_name: '',
+    website_url: '',
     street,
     city,
     state,
@@ -112,6 +121,9 @@ router.put('/qrdata/:id', async (req, res) => {
     qrdata.work_email = work_email || qrdata.work_email;
     qrdata.organization = organization || qrdata.organization;
     qrdata.phone = phone || qrdata.phone;
+    qrdata.cell_phone = cell_phone || qrdata.cell_phone;
+    qrdata.website_name = website_name || qrdata.website_name;
+    qrdata.website_url = website_url || qrdata.website_url;
     qrdata.street = street || qrdata.street;
     qrdata.city = city || qrdata.city;
     qrdata.state = state || qrdata.state;
@@ -167,14 +179,22 @@ router.put('/users/:id', async (req, res) => {
   }
 });
 
+
+
 router.get('/users/:userId', async (req, res) => {
   try {
-    const user = await Data.findById(req.params.userId);  // Find user by ID
+    // Find and increment scan_count
+    const user = await Data.findByIdAndUpdate(
+      req.params.userId,
+      { $inc: { scan_count: 1 } }, // Increment scan_count by 1
+      { new: true } // Return the updated document
+    );
+
     if (!user) return res.status(404).send('User not found');
 
     // Check if the user is allowed
     if (!user.isAllowed) {
-      return res.status(403).json({ message: 'User is blocked' });  // Send 'blocked' message
+      return res.status(403).json({ message: 'User is blocked' }); // Send 'blocked' message
     }
 
     // If the user is allowed, send user details
