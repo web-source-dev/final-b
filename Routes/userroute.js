@@ -180,8 +180,25 @@ router.put('/users/:id', async (req, res) => {
 });
 
 
-
 router.get('/users/:userId', async (req, res) => {
+  try {
+    const user = await Data.findById(req.params.userId);  // Find user by ID
+    if (!user) return res.status(404).send('User not found');
+
+    // Check if the user is allowed
+    if (!user.isAllowed) {
+      return res.status(403).json({ message: 'User is blocked' });  // Send 'blocked' message
+    }
+
+    // If the user is allowed, send user details
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+router.get('/users/scan/:userId', async (req, res) => {
   try {
     // Find and increment scan_count
     const user = await Data.findByIdAndUpdate(
