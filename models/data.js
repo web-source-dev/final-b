@@ -21,6 +21,15 @@ const userSchema = new mongoose.Schema({
   phone: {
   type: Number,
 },
+   cell_phone: {
+  type: Number,
+},
+   website_name: {
+    type: String,
+  },
+     website_url: {
+    type: String,
+  },
   street: {
     type: String,
   },
@@ -54,6 +63,10 @@ const userSchema = new mongoose.Schema({
   },
   user_image :{
     type: String,
+  },
+  scan_count:{
+    type: Number,
+    defualt:0,
   }
 });
 
